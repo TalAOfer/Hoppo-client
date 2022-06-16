@@ -26,6 +26,7 @@ function createSocketService() {
     terminate() {
       socket = null
     },
+    // 'id' : socket.id
 
   }
   return socketService

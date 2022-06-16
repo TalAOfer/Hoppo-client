@@ -27,7 +27,6 @@ function createPlayer(){
         height: 55
     })
     socketService.emit('newPlayer', {x : player.position.x, y : player.position.y})
-
     players.push(player)
 }
 

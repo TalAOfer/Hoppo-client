@@ -34,9 +34,9 @@ export function Canvas({ props }) {
 
         sceneRef.current = currentScene
         playerServices.createPlayer()
-        socketService.on('playerId', (id) => {
+        socketService.on('playerId' ,(id) => {
             playerIdRef.current = id
-            console.log('my id is', id)
+            console.log('my id is', playerIdRef.current)
         })
         animate()
     }, [])
