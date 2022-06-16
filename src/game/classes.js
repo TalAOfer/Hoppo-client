@@ -2,20 +2,6 @@ import { levelServices } from "../services/level-services"
 import { physics } from "./physics"
 import { playerController } from "./player-controller";
 
-// class Asset{
-//     constructor(width, height, filePath) {
-//         this.isLoaded = false
-//         const img = new Image(width, height)
-//         // img.onload = () => {
-//         //     this.isLoaded = true
-//         // }
-//         img.src = filePath
-
-//         this.img = img
-//     }
-
-// }
-
 class Sprite {
     constructor({ position, imgSrc, width, height, borderY = 1, borderWidth = 1, isWall = false, isActive = true, scale = 1, frameMax = 1 }) {
         this.img = new Image(width, height);
@@ -85,8 +71,8 @@ class Character {
 
         this.sprites = {
             idle: {
-                right: new Image(50, 71),
-                left: new Image(50, 71)
+                right: new Image(44, 55),
+                left: new Image(44, 55)
             }
         }
         this.punch = {
@@ -94,7 +80,7 @@ class Character {
                 position: this.position,
                 width: 2016,
                 height: 96,
-                imgSrc: './img/Background/hoppo-punch-animation-right.png',
+                imgSrc: '/hoppo-punch-animation-right.png',
                 borderY: 1,
                 borderWidth: 1,
                 isWall: false,
@@ -118,8 +104,8 @@ class Character {
         this.isAttacking = false
 
 
-        this.sprites.idle.right.src = '/kangorooright.png'
-        this.sprites.idle.left.src = '/kangorooleft.png'
+        this.sprites.idle.right.src = '/gorilla-right.png'
+        this.sprites.idle.left.src = '/gorilla-left.png'
         this.currentSprite = this.sprites.idle.right
 
         this.colliderBox = {
