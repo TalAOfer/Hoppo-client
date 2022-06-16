@@ -5,7 +5,7 @@ import { playerController } from '../game/player-controller'
 import { renderServices } from '../game/render'
 import { levelServices } from '../services/level-services'
 import { playerServices } from '../services/player-services'
-import { socketService} from '../services/socket-services'
+import { socketService } from '../services/socket-services'
 
 
 export function Canvas({ props }) {
@@ -13,6 +13,8 @@ export function Canvas({ props }) {
     const canvasRef = useRef(null)
     const cRef = useRef(null)
     const sceneRef = useRef(null)
+    const playerIdRef = useRef(null)
+
     const keys = {
         keyPressed: {},
         keyReleased: {},
@@ -32,8 +34,9 @@ export function Canvas({ props }) {
 
         sceneRef.current = currentScene
         playerServices.createPlayer()
-        socketService.on('serverToClient', () => {
-            console.log('got it , server!')
+        socketService.on('playerId', (id) => {
+            playerIdRef.current = id
+            console.log('my id is', id)
         })
         animate()
     }, [])
@@ -85,15 +88,13 @@ export function Canvas({ props }) {
             window.requestAnimationFrame(animate)
 
             const currentPlayers = playerServices.getPlayers()
-            
-            currentPlayers.forEach(player => {
-                renderServices.renderGame(sceneRef.current, cRef.current,keys)
-                renderServices.handleCamera(player, cRef.current)
-                playerController.keyHandlerFunc(player, keys)
-                player.update(keys);
-                socketService.emit('update', currentPlayers)
+            const player = currentPlayers[0]
 
-            })
+            renderServices.renderGame(sceneRef.current, cRef.current, keys)
+            playerController.keyHandlerFunc(player, keys)
+            player.update(keys);
+            socketService.emit('update', currentPlayers)
+            renderServices.handleCamera(player, cRef.current)
         }, 1000 / FPS)
     }
 
