@@ -1,6 +1,6 @@
 import {io} from 'socket.io-client'
 
-const baseUrl = "http://localhost:3000"
+const baseUrl = "http://localhost:3001"
 
 export const socketService = createSocketService()
 
