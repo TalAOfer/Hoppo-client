@@ -21,7 +21,6 @@ export function Canvas({ props }) {
     }
 
     useEffect(() => {
-        socketService.on('connect', console.log('socketing'))
         const canvas = canvasRef.current
         const c = canvas.getContext('2d')
         cRef.current = c
@@ -33,6 +32,9 @@ export function Canvas({ props }) {
 
         sceneRef.current = currentScene
         playerServices.createPlayer()
+        socketService.on('serverToClient', () => {
+            console.log('got it , server!')
+        })
         animate()
     }, [])
 
@@ -83,12 +85,13 @@ export function Canvas({ props }) {
             window.requestAnimationFrame(animate)
 
             const currentPlayers = playerServices.getPlayers()
-
+            
             currentPlayers.forEach(player => {
                 renderServices.renderGame(sceneRef.current, cRef.current,keys)
                 renderServices.handleCamera(player, cRef.current)
                 playerController.keyHandlerFunc(player, keys)
                 player.update(keys);
+                socketService.emit('update', currentPlayers)
 
             })
         }, 1000 / FPS)

@@ -1,4 +1,4 @@
-import {io} from 'socket.io-client'
+import { io } from "socket.io-client"
 
 const baseUrl = "http://localhost:3001"
 

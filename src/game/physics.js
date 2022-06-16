@@ -17,8 +17,6 @@ let gravity = 0.7;
 function applyVelocity(player) {
     player.position.x = Math.floor(player.position.x) + Math.floor(player.velocity.x);
     player.position.y = Math.floor(player.position.y) + Math.floor(player.velocity.y);
-    console.log(player.position);
-
 }
 
 function applyGravity(player){
