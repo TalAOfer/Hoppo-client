@@ -21,8 +21,8 @@ function createPlayer(){
         x: 0,
         y: 0
         },
-        width: 50,
-        height: 71
+        width: 44,
+        height: 55
     })
     players.push(player)
 }
