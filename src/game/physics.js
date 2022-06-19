@@ -84,7 +84,7 @@ function _handlePlatformCollision(player, keys) {
     keys.keyReleased[87] = false
     player.velocity.y = 0;
     player.velocity.x = 0;
-    console.log(player.velocity);
+    
 }
 
 function checkWallHeadbutt(player,platform){

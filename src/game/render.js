@@ -20,7 +20,7 @@ function handleCamera(player, c) {
     c.save();
 }
 
-function renderGame(scene, c, keys) {
+function renderGame(scene, c, keys, clientId) {
     //console.log(scene)
     const background = scene.background
     const platforms = scene.platforms
@@ -100,14 +100,14 @@ function renderGame(scene, c, keys) {
         //     currentPlayer.position.y,
         //     (currentPlayer.img.width / currentPlayer.frameMax) * currentPlayer.scale,
         //     currentPlayer.img.height)
-        // console.log(currentPlayer.img.width);
+        // c.drawImage(currentPlayer.currentSprite, currentPlayer.position.x, currentPlayer.position.y, currentPlayer.width, currentPlayer.height)
 
 
         c.fillStyle = 'black'
         c.fillRect(physics.getColliderDirection(currentPlayer) , currentPlayer.colliderBox.position.y , currentPlayer.colliderBox.width ,currentPlayer.colliderBox.height )
 
 
-        if (keys.keyPressed[87] && !currentPlayer.isJumping) {
+        if (keys.keyPressed[87] && !currentPlayer.isJumping && id === clientId) {
 
             c.fillStyle = '#433732'
             c.fillRect(currentPlayer.currentSprite === currentPlayer.sprites.idle.right ? currentPlayer.position.x : currentPlayer.position.x - 10,

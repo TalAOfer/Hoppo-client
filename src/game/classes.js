@@ -138,7 +138,6 @@ class Character {
         if(!currentScene) return
         physics.applyVelocity(this)
         physics.checkBorderBounce(this)
-        console.log(currentScene);
         /*check collision for walls and headbutt*/
         currentScene.platforms.forEach(platform => {
             if (platform.collider.isWall) {

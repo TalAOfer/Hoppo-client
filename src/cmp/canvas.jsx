@@ -35,12 +35,14 @@ export function Canvas({ props }) {
             playerRef.current.position.y = sceneRef.current.players[playerIdRef.current].position.y
             
 
-            renderServices.renderGame(sceneRef.current, cRef.current, keys)
+   
+
+            renderServices.renderGame(sceneRef.current, cRef.current, keys, playerIdRef.current)
             playerController.keyHandlerFunc(playerRef.current, keys)
             playerRef.current.update(keys, sceneRef.current);
             renderServices.handleCamera(playerRef.current, cRef.current)
             socketService.emit('updateToServer', playerRef.current)
-            console.log('update to server');
+     
         }, 1000 / FPS)
     }
 
@@ -64,18 +66,21 @@ export function Canvas({ props }) {
             playerIdRef.current = id
             console.log('my id is', playerIdRef.current)
             socketService.on('serverToClient', players => {
+                console.log('happend 1 ');
                 for(let id in players){
                     if(sceneRef.current.players[id] === undefined && id !== playerIdRef.current){
                         sceneRef.current.players[id] = playerServices.createPlayer()
-                        sceneRef.current.players[id].position = players[id].position
+                        // sceneRef.current.players[id].position = players[id].position
 
                     }
                 }
+                sceneRef.current.players = players  
             })
         })
-        socketService.on('serverToClient', players => { 
-            sceneRef.current.players = players  
-        })
+        // socketService.on('serverToClient', players => { 
+        //     console.log('happend 2 ');
+        //     sceneRef.current.players = players  
+        // })
         animate()
     }, [])
 
