@@ -1,25 +1,26 @@
 import { Canvas } from "../cmp/canvas"
+import { physics } from "./physics"
 
 export const renderServices = {
     renderGame,
     handleCamera
 }
 
-function handleCamera(player, c){
+function handleCamera(player, c) {
     let scroll = 0
-    if(player.position.y < 360 && player.position.y > -461){
-        scroll = Math.floor(player.velocity.y / 1.2 )
-        c.translate(0,(-scroll))
-    }else if(player.position.y > 360){
+    if (player.position.y < 360 && player.position.y > -461) {
+        scroll = Math.floor(player.velocity.y / 1.2)
+        c.translate(0, (-scroll))
+    } else if (player.position.y > 360) {
         c.setTransform(1, 0, 0, 1, 0, 0);
-    } else if(player.position.y < -461){
+    } else if (player.position.y < -461) {
         c.save();
         c.restore()
     }
     c.save();
 }
 
-function renderGame(scene, c,keys) {
+function renderGame(scene, c, keys) {
     //console.log(scene)
     const background = scene.background
     const platforms = scene.platforms
@@ -65,39 +66,63 @@ function renderGame(scene, c,keys) {
             platform.collider.height)*/
     })
     //draw players
-    players.forEach(player => {
-        c.drawImage(
-            player.currentSprite,
-            player.currentFrame * (player.img.width / player.frameMax),
-            0,
-            player.img.width / player.frameMax,
-            player.img.height,
-            player.position.x,
-            player.position.y,
-            (player.img.width / player.frameMax) * player.scale,
-            player.img.height)
+    // players.forEach(player => {
+    //     c.drawImage(
+    //         player.currentSprite,
+    //         player.currentFrame * (player.img.width / player.frameMax),
+    //         0,
+    //         player.img.width / player.frameMax,
+    //         player.img.height,
+    //         player.position.x,
+    //         player.position.y,
+    //         (player.img.width / player.frameMax) * player.scale,
+    //         player.img.height)
+    for (let id in players) {
+        const currentPlayer = players[id]
+        // console.log(currentPlayer);
+        switch(currentPlayer.animal){
+            case 'gorilla':
+                currentPlayer.sprites.idle.right.src = '/gorilla-right.png'
+                currentPlayer.sprites.idle.left.src = '/gorilla-left.png'
+                // console.log(currentPlayer.currentSprite);
+                break
+        }
+        c.fillStyle = 'red'
+        c.fillRect(currentPlayer.position.x , currentPlayer.position.y , currentPlayer.width ,currentPlayer.height )
+
+        // c.drawImage(
+        //     currentPlayer.currentSprite,
+        //     currentPlayer.currentFrame * (currentPlayer.img.width / currentPlayer.frameMax),
+        //     0,
+        //     currentPlayer.img.width / currentPlayer.frameMax,
+        //     currentPlayer.img.height,
+        //     currentPlayer.position.x,
+        //     currentPlayer.position.y,
+        //     (currentPlayer.img.width / currentPlayer.frameMax) * currentPlayer.scale,
+        //     currentPlayer.img.height)
+        // console.log(currentPlayer.img.width);
 
 
         // c.fillStyle = 'red'
         // c.fillRect(getColliderDirection() , player.colliderBox.position.y , player.colliderBox.width ,player.colliderBox.height )
 
 
-        if (keys.keyPressed[87] && !player.isJumping) {
+        if (keys.keyPressed[87] && !currentPlayer.isJumping) {
 
             c.fillStyle = '#433732'
-            c.fillRect(player.currentSprite === player.sprites.idle.right ? player.position.x : player.position.x - 10,
-                player.chargeBar.position.y - 20,
-                player.chargeBar.width,
-                player.chargeBar.height)
+            c.fillRect(currentPlayer.currentSprite === currentPlayer.sprites.idle.right ? currentPlayer.position.x : currentPlayer.position.x - 10,
+                currentPlayer.chargeBar.position.y - 20,
+                currentPlayer.chargeBar.width,
+                currentPlayer.chargeBar.height)
 
             c.fillStyle = '#EAA141'
-            c.fillRect((player.currentSprite === player.sprites.idle.right ? player.position.x : player.position.x - 10) + 1,
-                player.chargeBar.position.y - 19,
-                player.chargeBar.tick.width,
-                player.chargeBar.tick.height)
+            c.fillRect((currentPlayer.currentSprite === currentPlayer.sprites.idle.right ? currentPlayer.position.x : currentPlayer.position.x - 10) + 1,
+                currentPlayer.chargeBar.position.y - 19,
+                currentPlayer.chargeBar.tick.width,
+                currentPlayer.chargeBar.tick.height)
 
-            player.chargeBar.tick.width += 0.9
+            currentPlayer.chargeBar.tick.width += 0.9
         }
-    })
+    }
 }
 

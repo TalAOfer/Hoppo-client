@@ -14,6 +14,7 @@ export function Canvas({ props }) {
     const cRef = useRef(null)
     const sceneRef = useRef(null)
     const playerIdRef = useRef(null)
+    const playerRef = useRef(null)
 
     const keys = {
         keyPressed: {},
@@ -22,9 +23,34 @@ export function Canvas({ props }) {
         keyUp: null
     }
 
+    let currentPlayers = {}
+
+    const animate = () => {
+        //calls animate function every window frame
+        setTimeout(() => {
+            window.requestAnimationFrame(animate)
+
+            const currentPlayers = sceneRef.current.players
+            playerRef.current.position.x = sceneRef.current.players[playerIdRef.current].position.x
+            playerRef.current.position.y = sceneRef.current.players[playerIdRef.current].position.y
+
+
+            renderServices.renderGame(sceneRef.current, cRef.current, keys)
+            playerController.keyHandlerFunc(playerRef.current, keys)
+            playerRef.current.update(keys);
+            renderServices.handleCamera(playerRef.current, cRef.current)
+            socketService.emit('updateToServer', playerRef.current)
+            console.log('update to server');
+        }, 1000 / FPS)
+    }
+
     useEffect(() => {
         const canvas = canvasRef.current
         const c = canvas.getContext('2d')
+        playerRef.current = playerServices.createPlayer()
+        // console.log(playerRef.current.position.x + ',' + playerRef.current.position.y);
+        console.log(playerRef.current);
+
         cRef.current = c
         canvas.width = 480;
         canvas.height = 720;
@@ -33,10 +59,22 @@ export function Canvas({ props }) {
         addEventListeners()
 
         sceneRef.current = currentScene
-        playerServices.createPlayer()
+        // playerServices.createPlayer()
         socketService.on('playerId' ,(id) => {
             playerIdRef.current = id
             console.log('my id is', playerIdRef.current)
+            socketService.on('serverToClient', players => {
+                for(let id in players){
+                    if(sceneRef.current.players[id] === undefined && id !== playerIdRef.current){
+                        sceneRef.current.players[id] = playerServices.createPlayer()
+                        sceneRef.current.players[id].position = players[id].position
+
+                    }
+                }
+            })
+        })
+        socketService.on('serverToClient', players => { 
+            sceneRef.current.players = players  
         })
         animate()
     }, [])
@@ -81,23 +119,6 @@ export function Canvas({ props }) {
             //keys.keyReleased[event.keyCode || event.which] = true;
         })
     }
-
-    const animate = () => {
-        //calls animate function every window frame
-        setTimeout(() => {
-            window.requestAnimationFrame(animate)
-
-            const currentPlayers = playerServices.getPlayers()
-            const player = currentPlayers[0]
-
-            renderServices.renderGame(sceneRef.current, cRef.current, keys)
-            playerController.keyHandlerFunc(player, keys)
-            player.update(keys);
-            socketService.emit('update', currentPlayers)
-            renderServices.handleCamera(player, cRef.current)
-        }, 1000 / FPS)
-    }
-
 
     return <canvas className='canvas' ref={canvasRef} {...props} />
 }
