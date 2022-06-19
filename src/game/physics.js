@@ -59,16 +59,15 @@ function checkBorderBounce(player) {
     }
 }
 
-function checkPlatformCollision(player, keys) {
+function checkPlatformCollision(player, keys, currentScene) {
     const playerBottom = player.colliderBox.position.y + player.colliderBox.height
-    const currentScene = levelServices.getScene()
     currentScene.platforms.forEach(platform => {
         const platformTop = platform.collider.position.y
         if (platform.collider.isActive) {
             if (playerBottom <= platformTop
                 && playerBottom + player.velocity.y >= platformTop
-                && getColliderDirection(player) + player.colliderBox.width >= platform.collider.position.x - 1
-                && getColliderDirection(player) <= platform.collider.position.x + platform.collider.width - 1) {
+                && player.position.x + player.colliderBox.width >= platform.collider.position.x - 1
+                && player.position.x <= platform.collider.position.x + platform.collider.width - 1) {
                    _handlePlatformCollision(player, keys)
  
             }
@@ -85,6 +84,7 @@ function _handlePlatformCollision(player, keys) {
     keys.keyReleased[87] = false
     player.velocity.y = 0;
     player.velocity.x = 0;
+    console.log(player.velocity);
 }
 
 function checkWallHeadbutt(player,platform){

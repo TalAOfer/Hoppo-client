@@ -103,8 +103,8 @@ function renderGame(scene, c, keys) {
         // console.log(currentPlayer.img.width);
 
 
-        // c.fillStyle = 'red'
-        // c.fillRect(getColliderDirection() , player.colliderBox.position.y , player.colliderBox.width ,player.colliderBox.height )
+        c.fillStyle = 'black'
+        c.fillRect(physics.getColliderDirection(currentPlayer) , currentPlayer.colliderBox.position.y , currentPlayer.colliderBox.width ,currentPlayer.colliderBox.height )
 
 
         if (keys.keyPressed[87] && !currentPlayer.isJumping) {

@@ -33,11 +33,11 @@ export function Canvas({ props }) {
             const currentPlayers = sceneRef.current.players
             playerRef.current.position.x = sceneRef.current.players[playerIdRef.current].position.x
             playerRef.current.position.y = sceneRef.current.players[playerIdRef.current].position.y
-
+            
 
             renderServices.renderGame(sceneRef.current, cRef.current, keys)
             playerController.keyHandlerFunc(playerRef.current, keys)
-            playerRef.current.update(keys);
+            playerRef.current.update(keys, sceneRef.current);
             renderServices.handleCamera(playerRef.current, cRef.current)
             socketService.emit('updateToServer', playerRef.current)
             console.log('update to server');

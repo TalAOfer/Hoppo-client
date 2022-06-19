@@ -75,6 +75,8 @@ class Character {
                 left: new Image(44, 55)
             }
         }
+        this.animal = ''
+        
         this.punch = {
             right: new Sprite({
                 position: this.position,
@@ -132,11 +134,12 @@ class Character {
         this.isShovedX = false
         this.isShovedY = false
     }
-    update(keys) {
+    update(keys, currentScene) {
+        if(!currentScene) return
         physics.applyVelocity(this)
         physics.checkBorderBounce(this)
+        console.log(currentScene);
         /*check collision for walls and headbutt*/
-        const currentScene = levelServices.getScene()
         currentScene.platforms.forEach(platform => {
             if (platform.collider.isWall) {
                 physics.checkWallHeadbutt(this, platform)
@@ -151,7 +154,7 @@ class Character {
         //detect floor collision and apply gravity
         physics.applyGravity(this)
         playerController.handleJumpInput(this, keys)
-        physics.checkPlatformCollision(this, keys)
+        physics.checkPlatformCollision(this, keys,currentScene)
     }
 }
 
